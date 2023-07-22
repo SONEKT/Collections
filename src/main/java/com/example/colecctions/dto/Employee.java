@@ -1,5 +1,7 @@
 package com.example.colecctions.dto;
 
+import java.util.Objects;
+
 public class Employee {
     private String lastName;
     private String firstName;
@@ -38,11 +40,11 @@ public class Employee {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Employee employee = (Employee) o;
-        return Object.equals(lastName, employee.lastName) && Object.equals(firstName, employee.firstName);
+        return Objects.equals(lastName, employee.lastName) && Objects.equals(firstName, employee.firstName);
     }
 
-   @Override
+    @Override
     public int hashCode() {
-        return Object.hash(lastName, firstName);
+        return Objects.hash(lastName, firstName);
     }
 }
