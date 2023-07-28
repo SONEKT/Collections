@@ -2,6 +2,7 @@ package com.example.colecctions.service;
 
 import com.example.colecctions.dto.Employee;
 
+import java.util.Collection;
 import java.util.List;
 
 public interface EmployeeService {
@@ -11,5 +12,5 @@ public interface EmployeeService {
 
     Employee findEmployee(String firstName, String lastName);
 
-    List<Employee> findAll();
+    Collection<Employee> findAll();
 }
