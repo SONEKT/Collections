@@ -21,11 +21,11 @@ public class EmployeeServiceImpl implements EmployeeService {
     }
 
     @Override
-    public Employee addEmployee(String firstName, String lastName) {
+    public Employee addEmployee(String firstName, String lastName, int department, double salary) {
         if (employees.size() == EMPLOYEE_MAX_SIZE) {
             throw new EmployeeStorageFullException("Превышен лимит сотрудников фирмы");
         }
-        Employee employee = new Employee(firstName, lastName);
+        Employee employee = new Employee(firstName, lastName, department, salary);
 
         if (employees.containsKey(employee.getFullName())) {
             throw new EmployeeAlreadyAddedException("В коллекции уже есть такой сотрудник");
@@ -38,7 +38,7 @@ public class EmployeeServiceImpl implements EmployeeService {
 
     @Override
     public Employee removeEmployee(String firstName, String lastName) {
-        Employee employee = new Employee(firstName, lastName);
+        Employee employee = employees.remove(firstName + lastName);
         if (employees.containsKey(employee.getFullName())) {
             return employees.remove(employee.getFullName());
         } else {
@@ -50,7 +50,7 @@ public class EmployeeServiceImpl implements EmployeeService {
 
     @Override
     public Employee findEmployee(String firstName, String lastName) {
-        Employee employee = new Employee(firstName, lastName);
+        Employee employee = employees.get(firstName + lastName);
         if (employees.containsKey(employee.getFullName())) {
             return employees.get(employee.getFullName());
         } else {

@@ -6,9 +6,15 @@ public class Employee {
     private String lastName;
     private String firstName;
 
-    public Employee(String lastName, String firstName) {
+    private int department;
+
+    private double salary;
+
+    public Employee(String lastName, String firstName, int department, double salary) {
         this.lastName = lastName;
         this.firstName = firstName;
+        this.department = department;
+        this.salary = salary;
     }
 
     public String getLastName() {
@@ -29,6 +35,14 @@ public class Employee {
 
     public void setFirstName(String firstName) {
         this.firstName = firstName;
+    }
+
+    public int getDepartment() {
+        return department;
+    }
+
+    public double getSalary() {
+        return salary;
     }
 
     @Override
