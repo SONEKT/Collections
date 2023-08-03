@@ -31,12 +31,12 @@ public class DepartmentController {
         return departmentService.findMinSalaryEmployee(department);
     }
 
-    @GetMapping("/all")
+    @GetMapping(value = "/all", params = "department")
     public Collection<Employee> getAll(@RequestParam int department) {
         return departmentService.getAll(department);
     }
 
-    @GetMapping("/allall")
+    @GetMapping("/all")
     public Map<Integer, List<Employee>> getAllByDepartment() {
         return departmentService.getAllGropingByDepartment();
     }
