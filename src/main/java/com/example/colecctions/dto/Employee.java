@@ -1,6 +1,10 @@
 package com.example.colecctions.dto;
 
+import org.apache.commons.lang3.StringUtils;
+
 import java.util.Objects;
+
+import static org.apache.commons.lang3.StringUtils.*;
 
 public class Employee {
     private String lastName;
@@ -11,8 +15,8 @@ public class Employee {
     private double salary;
 
     public Employee(String lastName, String firstName, int department, double salary) {
-        this.lastName = lastName;
-        this.firstName = firstName;
+        this.lastName = capitalize(lastName.toLowerCase());
+        this.firstName = capitalize(firstName.toLowerCase());
         this.department = department;
         this.salary = salary;
     }

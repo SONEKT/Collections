@@ -4,9 +4,13 @@ import com.example.colecctions.dto.Employee;
 import com.example.colecctions.exeptions.EmployeeAlreadyAddedException;
 import com.example.colecctions.exeptions.EmployeeNotFoundException;
 import com.example.colecctions.exeptions.EmployeeStorageFullException;
+import com.example.colecctions.exeptions.InvalidInputException;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
+
+import static org.apache.commons.lang3.StringUtils.*;
 
 @Service
 public class EmployeeServiceImpl implements EmployeeService {
@@ -22,6 +26,9 @@ public class EmployeeServiceImpl implements EmployeeService {
 
     @Override
     public Employee addEmployee(String firstName, String lastName, int department, double salary) {
+        validateInput(firstName, lastName);
+
+
         if (employees.size() == EMPLOYEE_MAX_SIZE) {
             throw new EmployeeStorageFullException("Превышен лимит сотрудников фирмы");
         }
@@ -38,6 +45,8 @@ public class EmployeeServiceImpl implements EmployeeService {
 
     @Override
     public Employee removeEmployee(String firstName, String lastName) {
+        validateInput(firstName, lastName);
+
         Employee employee = employees.remove(firstName + lastName);
         if (employees.containsKey(employee.getFullName())) {
             return employees.remove(employee.getFullName());
@@ -50,6 +59,8 @@ public class EmployeeServiceImpl implements EmployeeService {
 
     @Override
     public Employee findEmployee(String firstName, String lastName) {
+        validateInput(firstName, lastName);
+
         Employee employee = employees.get(firstName + lastName);
         if (employees.containsKey(employee.getFullName())) {
             return employees.get(employee.getFullName());
@@ -61,5 +72,11 @@ public class EmployeeServiceImpl implements EmployeeService {
     @Override
     public Collection<Employee> findAll() {
         return Collections.unmodifiableCollection(employees.values());
+    }
+
+    private void validateInput(String firstName, String lastName) {
+        if (!(isAlpha(firstName) && isAlpha(lastName))) {
+            throw new InvalidInputException();
+        }
     }
 }
