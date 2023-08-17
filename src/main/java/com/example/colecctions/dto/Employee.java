@@ -14,7 +14,7 @@ public class Employee {
 
     private double salary;
 
-    public Employee(String lastName, String firstName, int department, double salary) {
+    public Employee(String firstName, String lastName, int department, double salary) {
         this.lastName = capitalize(lastName.toLowerCase());
         this.firstName = capitalize(firstName.toLowerCase());
         this.department = department;

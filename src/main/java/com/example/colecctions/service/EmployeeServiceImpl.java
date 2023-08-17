@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import java.util.*;
 
 import static org.apache.commons.lang3.StringUtils.*;
+import static org.springframework.cache.interceptor.SimpleKeyGenerator.generateKey;
 
 @Service
 public class EmployeeServiceImpl implements EmployeeService {
@@ -32,13 +33,18 @@ public class EmployeeServiceImpl implements EmployeeService {
         if (employees.size() == EMPLOYEE_MAX_SIZE) {
             throw new EmployeeStorageFullException("Превышен лимит сотрудников фирмы");
         }
-        Employee employee = new Employee(firstName, lastName, department, salary);
 
-        if (employees.containsKey(employee.getFullName())) {
+        Employee employee = new Employee(StringUtils.capitalize(firstName), StringUtils.capitalize(lastName),
+                department, salary);
+
+        String key = (firstName + lastName);
+
+
+        if (employees.containsKey(key)) {
             throw new EmployeeAlreadyAddedException("В коллекции уже есть такой сотрудник");
         }
 
-        employees.put(employee.getFullName(), employee);
+        employees.put(key, employee);
 
         return employee;
     }
@@ -48,10 +54,10 @@ public class EmployeeServiceImpl implements EmployeeService {
         validateInput(firstName, lastName);
 
         Employee employee = employees.remove(firstName + lastName);
-        if (employees.containsKey(employee.getFullName())) {
-            return employees.remove(employee.getFullName());
-        } else {
+        if (Objects.isNull(employee)) {
             throw new EmployeeNotFoundException("Данного сотрудника нет в коллекции");
+        } else {
+            return employee;
         }
 
 
@@ -62,11 +68,10 @@ public class EmployeeServiceImpl implements EmployeeService {
         validateInput(firstName, lastName);
 
         Employee employee = employees.get(firstName + lastName);
-        if (employees.containsKey(employee.getFullName())) {
-            return employees.get(employee.getFullName());
-        } else {
+        if (Objects.isNull(employee)) {
             throw new EmployeeNotFoundException("Сотрудник не найден");
         }
+        return employee;
     }
 
     @Override
