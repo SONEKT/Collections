@@ -16,7 +16,7 @@ import static org.springframework.cache.interceptor.SimpleKeyGenerator.generateK
 @Service
 public class EmployeeServiceImpl implements EmployeeService {
 
-    private Map<String, Employee> employees;
+    private final Map<String, Employee> employees;
 
     private static final int EMPLOYEE_MAX_SIZE = 10;
 
@@ -25,9 +25,16 @@ public class EmployeeServiceImpl implements EmployeeService {
         this.employees = new HashMap<>();
     }
 
+    public String makeKey(String firstName, String lastName) {
+        String key = (firstName + lastName);
+        return key;
+    }
+
     @Override
     public Employee addEmployee(String firstName, String lastName, int department, double salary) {
         validateInput(firstName, lastName);
+
+        String key = makeKey(firstName, lastName);
 
 
         if (employees.size() == EMPLOYEE_MAX_SIZE) {
@@ -36,8 +43,6 @@ public class EmployeeServiceImpl implements EmployeeService {
 
         Employee employee = new Employee(StringUtils.capitalize(firstName), StringUtils.capitalize(lastName),
                 department, salary);
-
-        String key = (firstName + lastName);
 
 
         if (employees.containsKey(key)) {
@@ -53,7 +58,7 @@ public class EmployeeServiceImpl implements EmployeeService {
     public Employee removeEmployee(String firstName, String lastName) {
         validateInput(firstName, lastName);
 
-        Employee employee = employees.remove(firstName + lastName);
+        Employee employee = employees.remove(makeKey(firstName, lastName));
         if (Objects.isNull(employee)) {
             throw new EmployeeNotFoundException("Данного сотрудника нет в коллекции");
         } else {
@@ -67,7 +72,7 @@ public class EmployeeServiceImpl implements EmployeeService {
     public Employee findEmployee(String firstName, String lastName) {
         validateInput(firstName, lastName);
 
-        Employee employee = employees.get(firstName + lastName);
+        Employee employee = employees.get(makeKey(firstName, lastName));
         if (Objects.isNull(employee)) {
             throw new EmployeeNotFoundException("Сотрудник не найден");
         }
